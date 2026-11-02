@@ -1,6 +1,6 @@
 module github.com/andywang2011/go-libs
 
-go 1.25
+go 1.27.3
 
 require (
 	golang.org/x/crypto v0.48.0
