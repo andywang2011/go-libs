@@ -3,7 +3,7 @@ module github.com/andywang2011/go-libs
 go 1.27.3
 
 require (
-	golang.org/x/crypto v0.48.0
+	golang.org/x/crypto v0.58.0
 	gorm.io/gorm v1.25.7
 )
 
