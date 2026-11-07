@@ -76,30 +76,26 @@ func TestParsePKCS8PublicKey2(t *testing.T) {
 	}
 }
 
-func TestEncryptWithPKCS1v15(t *testing.T) {
+func TestEncryptDecryptOAEP(t *testing.T) {
 	pub, err := rsax.ParsePKCS8PublicKey(formatPubkey)
 	if err != nil {
 		t.Fatal(err)
 	}
-	data := []byte("foo bar")
-	_, err = rsax.EncryptWithPKCS1v15(data, pub)
-	if err != nil {
-		t.Fatal(err)
-	}
-}
-
-func TestDecryptWithPKCS1v15(t *testing.T) {
 	priv, err := rsax.ParsePKCS1PrivateKey(formatPrikey)
 	if err != nil {
 		t.Fatal(err)
 	}
-	cipher := "MpdTQxhzsinyt0F7LtOOxsCJAU6Bumvd9roMskIOZxiDl6/ab+MVCpun43tvkFaFk8UNFfiwIbmU/zJJnK6T/KyZcWF81QvImSp5EqHV0Mb1vM3DzwAroe3l6zlaJjaMT5GM9EbYwjEEDENqB0mwnx9dtFHIjT7ArOrdgcGfOc4CcsVXQHNlvYcqAs/H6JyE0O3yqoShkXt1dcTG0+q9Dp8TqukqQeQnYNjlxq6lDonnZuBZ06h4g2zlgESq6KhEpe07AD+XrEj6PWQIBCnfacR7dDzQVG63PCS6Cwqlqu69002bOo9dOech4wFJB+/P8WDfbFz2YVaN/JKT7Sax2g=="
-	d, err := rsax.DecryptWithPKCS1v15([]byte(cipher), priv)
+	data := []byte("foo bar")
+	enc, err := rsax.EncryptWithOAEP(data, nil, pub, crypto.SHA256.New())
 	if err != nil {
 		t.Fatal(err)
 	}
-	if d != "foo bar" {
-		t.Fatal("DecryptWithPKCS1v15 fail")
+	d, err := rsax.DecryptWithOAEP(enc, nil, priv, crypto.SHA256.New())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(d) != "foo bar" {
+		t.Fatal("DecryptWithOAEP fail")
 	}
 }
 

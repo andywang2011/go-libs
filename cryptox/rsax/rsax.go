@@ -136,51 +136,6 @@ func VerifySignWithPKCS1v15(data, sign string, pubkey *rsa.PublicKey, hash crypt
 	return rsa.VerifyPKCS1v15(pubkey, hash, hashed, sig)
 }
 
-func EncryptWithPKCS1v15(data []byte, pubkey *rsa.PublicKey) (string, error) {
-	keySize, dataSize := pubkey.Size(), len(data)
-	offSet, once := 0, keySize-11
-	buffer := bytes.Buffer{}
-	for offSet < dataSize {
-		endIndex := offSet + once
-		if endIndex > dataSize {
-			endIndex = dataSize
-		}
-		b, err := rsa.EncryptPKCS1v15(rand.Reader, pubkey, data[offSet:endIndex])
-		if err != nil {
-			return "", err
-		}
-		buffer.Write(b)
-		offSet = endIndex
-	}
-
-	return base64.StdEncoding.EncodeToString(buffer.Bytes()), nil
-}
-
-func DecryptWithPKCS1v15(data []byte, prikey *rsa.PrivateKey) (string, error) {
-	byts, err := base64.StdEncoding.DecodeString(string(data))
-	if err != nil {
-		return "", err
-	}
-
-	keySize, dataSize := prikey.Size(), len(byts)
-	var offSet = 0
-	var buffer = bytes.Buffer{}
-	for offSet < dataSize {
-		endIndex := offSet + keySize
-		if endIndex > dataSize {
-			endIndex = dataSize
-		}
-		b, err := rsa.DecryptPKCS1v15(rand.Reader, prikey, byts[offSet:endIndex])
-		if err != nil {
-			return "", err
-		}
-		buffer.Write(b)
-		offSet = endIndex
-	}
-
-	return buffer.String(), nil
-}
-
 func SignWithPSS(data []byte, prikey *rsa.PrivateKey, hash crypto.Hash) (string, error) {
 	h := hash.New()
 	h.Write(data)

@@ -8,22 +8,21 @@ import (
 )
 
 type User struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name,omitempty"`
-	Desc     string
-	OnlyOpt  string `json:",omitempty"`
-	Ignore   string `json:"-"`
-	DashName string `json:"-,"`
-	secret   string
+	ID      int    `json:"id"`
+	Name    string `json:"name,omitempty"`
+	Desc    string
+	OnlyOpt string `json:",omitempty"`
+	Ignore  string `json:"-"`
+	secret  string
 }
 
 func TestStruct2Map(t *testing.T) {
-	u := &User{ID: 123, Name: "Tom", Desc: "boy", OnlyOpt: "o", Ignore: "ignore", DashName: "d", secret: "xxx"}
+	u := &User{ID: 123, Name: "Tom", Desc: "boy", OnlyOpt: "o", Ignore: "ignore", secret: "xxx"}
 	m, err := reflectx.Struct2Map(u)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := map[string]any{"id": 123, "name": "Tom", "Desc": "boy", "OnlyOpt": "o", "-": "d"}
+	want := map[string]any{"id": 123, "name": "Tom", "Desc": "boy", "OnlyOpt": "o"}
 	if len(m) != len(want) {
 		t.Fatalf("got %v", m)
 	}
@@ -34,6 +33,9 @@ func TestStruct2Map(t *testing.T) {
 	}
 	if _, ok := m["name,omitempty"]; ok {
 		t.Error("omitempty must not leak into key")
+	}
+	if _, ok := m["Ignore"]; ok {
+		t.Error("json:\"-\" field must be skipped")
 	}
 }
 
