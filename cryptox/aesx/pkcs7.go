@@ -12,8 +12,12 @@ var ErrInvalidPadding = errors.New("aesx: invalid PKCS7 padding")
 // PKCS7Padding applies PKCS#7 padding to data for the given block size.
 // The input slice is not modified.
 func PKCS7Padding(data []byte, blockSize int) []byte {
+	if blockSize <= 0 || blockSize > 255 {
+		panic("aesx: PKCS7 blockSize must be in 1..255")
+	}
 	padding := blockSize - len(data)%blockSize
-	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	padByte := byte(padding)
+	padtext := bytes.Repeat([]byte{padByte}, padding)
 	out := make([]byte, 0, len(data)+padding)
 	out = append(out, data...)
 	return append(out, padtext...)
