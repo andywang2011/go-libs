@@ -16,7 +16,8 @@ func PKCS7Padding(data []byte, blockSize int) []byte {
 		panic("aesx: PKCS7 blockSize must be in 1..255")
 	}
 	padding := blockSize - len(data)%blockSize
-	padByte := byte(padding)
+	// padding is in [1, blockSize] and blockSize is capped at 255 above.
+	padByte := uint8(padding) //nolint:gosec // G115: bounded by blockSize check
 	padtext := bytes.Repeat([]byte{padByte}, padding)
 	out := make([]byte, 0, len(data)+padding)
 	out = append(out, data...)
