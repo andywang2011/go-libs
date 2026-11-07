@@ -101,7 +101,7 @@ func TestGCMDecryptTooShort(t *testing.T) {
 
 func TestGCMStringRoundTrip(t *testing.T) {
 	key := testKey(t, 32)
-	enc, err := GCMEncryptString(key, "héllo 世界")
+	enc, err := GCMEncryptString(key, "héllo мир")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -109,7 +109,7 @@ func TestGCMStringRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if dec != "héllo 世界" {
+	if dec != "héllo мир" {
 		t.Fatalf("got %q", dec)
 	}
 }
