@@ -1,7 +1,7 @@
 package types
 
 /*
-Go 1.21 新增标准库cmp中定义了Ordered泛型
+Go 1.21 stdlib cmp defines the Ordered constraint; this package mirrors it for pre-1.21 builds.
 */
 
 type Ordered interface {
@@ -11,7 +11,7 @@ type Ordered interface {
 }
 
 /*
-获取一组可比较大小类型里面的最值，Go 1.21 以后新增内置的 min 和 max 函数实现了以下两个等效方法。
+Max and Min mirror the built-in min/max added in Go 1.21 for ordered types.
 */
 
 func Max[T Ordered](item T, items ...T) T {

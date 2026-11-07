@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## [0.1.0] - 2026-11-07
 
-- Import shared utilities from application `pkg/util` copies: `cryptox`, `random`, `types`, `timex`, `jsonmap`, `reflectx`, `hash`, `encrypt`.
-- `jsonmap` uses local GORM dialect constants (no app `pkg/def` dependency).
+### Added
+
+- Subpackages: `cryptox/*`, `random`, `types`, `timex`, `jsonmap`, `reflectx`, `hash`, `encrypt`
+- English README, examples, and package documentation

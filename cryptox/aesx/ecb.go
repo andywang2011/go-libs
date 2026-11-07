@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 )
 
-// PKCS7Padding 使用PKCS7进行填充，IOS也是7
+// PKCS7Padding applies PKCS#7 padding (same scheme as iOS PKCS7).
 func PKCS7Padding(ciphertext []byte, blockSize int) []byte {
 	padding := blockSize - len(ciphertext)%blockSize
 	padtext := bytes.Repeat([]byte{byte(padding)}, padding)

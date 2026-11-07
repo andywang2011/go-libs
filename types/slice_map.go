@@ -5,7 +5,7 @@ func SliceEqual[T comparable](a, b []T) bool {
 	if la != lb {
 		return false
 	}
-	//return reflect.DeepEqual(a, b) // 反射效率较差，改用遍历比较
+	//return reflect.DeepEqual(a, b) // reflection is slower; compare element-wise instead
 	for i := 0; i < la; i++ {
 		if a[i] != b[i] {
 			return false
@@ -31,7 +31,8 @@ func SliceToCountMap[T comparable](arr []T) map[T]int {
 }
 
 /*
-Go1.21标准库将新增slices包和maps包提供对任意类型slice和map的常用操作，不再需要以下方法。
+Go 1.21 added std slices and maps packages for generic slice/map helpers;
+prefer those for new code. The functions below remain for older callers.
 */
 
 func SliceContain[T comparable](arr []T, target T) bool {

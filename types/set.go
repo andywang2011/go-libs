@@ -1,11 +1,11 @@
 package types
 
-// Set 非并发安全的简单集合
+// Set is a simple, non-concurrent-safe set.
 type Set[T comparable] struct {
 	m map[T]struct{}
 }
 
-// NewSet 初始化一个集合，必须传入类型明确的slice
+// NewSet builds a set from a typed slice.
 func NewSet[T comparable](items []T) *Set[T] {
 	m := make(map[T]struct{})
 	for _, item := range items {
@@ -14,33 +14,33 @@ func NewSet[T comparable](items []T) *Set[T] {
 	return &Set[T]{m: m}
 }
 
-// Add 往集合添加元素
+// Add inserts an element.
 func (s *Set[T]) Add(v T) {
 	s.m[v] = struct{}{}
 }
 
-// Remove 从集合移除元素
+// Remove deletes an element.
 func (s *Set[T]) Remove(v T) {
 	delete(s.m, v)
 }
 
-// Clear 清空集合
+// Clear removes all elements.
 func (s *Set[T]) Clear() {
 	s.m = map[T]struct{}{}
 }
 
-// Size 集合元素个数
+// Size returns the number of elements.
 func (s *Set[T]) Size() int {
 	return len(s.m)
 }
 
-// Has 集合中是否包含某元素
+// Has reports whether v is in the set.
 func (s *Set[T]) Has(v T) bool {
 	_, ok := s.m[v]
 	return ok
 }
 
-// Items 集合元素
+// Items returns all elements (order undefined).
 func (s *Set[T]) Items() []T {
 	items := make([]T, 0, len(s.m))
 	for item := range s.m {

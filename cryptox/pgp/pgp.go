@@ -10,9 +10,9 @@ import (
 )
 
 func EncryptBytes(origBytes []byte, publicKey []byte, blockType string) ([]byte, error) {
-	//origBytes 待加密内容
-	//publicKey 公钥
-	//blockType 加密后标签
+	// origBytes plaintext
+	// publicKey armored public key
+	// blockType armor block type label
 	//Read public key
 	keyringBuffer := bytes.NewReader(publicKey)
 	entityList, err := openpgp.ReadArmoredKeyRing(keyringBuffer)
@@ -56,10 +56,10 @@ func EncryptBytes(origBytes []byte, publicKey []byte, blockType string) ([]byte,
 }
 
 func DecryptBytes(encBytes, privateKey, passphrase []byte, blockType string) ([]byte, error) {
-	//encBytes 待解密内容
-	//privateKey 私钥
-	//passphrase 私钥口令
-	//blockType 密文标签
+	// encBytes armored ciphertext
+	// privateKey armored private key
+	// passphrase private-key passphrase
+	// blockType expected armor block type
 	//armor string decode
 	armorBytes := bytes.NewBuffer(encBytes)
 	armorDecoder, err := armor.Decode(armorBytes)

@@ -38,7 +38,7 @@ func (t *JSONTime) Scan(v interface{}) error {
 	case time.Time:
 		*t = JSONTime(vt)
 	default:
-		return errors.New("类型处理错误")
+		return errors.New("unsupported Scan type")
 	}
 	return nil
 }

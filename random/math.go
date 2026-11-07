@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// 使用私有的随机生成器
+// package-local PRNG (not crypto-safe).
 var irand = rand.New(rand.NewSource(time.Now().UnixNano()))
 
 const (
@@ -40,7 +40,7 @@ func Chars(chars string, n int) string {
 	return string(buf)
 }
 
-// 生成[min,max]的随机数，可包含负数
+// RangeNum returns a uniform random int in [min, max] (inclusive); min may exceed max.
 func RangeNum(min, max int) int {
 	if min > max {
 		min, max = max, min
@@ -49,7 +49,7 @@ func RangeNum(min, max int) int {
 	return num + min
 }
 
-// 打乱一个数组
+// Shuffle permutes sli in place using the package PRNG.
 func Shuffle[T any](sli []T) {
 	irand.Shuffle(len(sli), func(i, j int) {
 		sli[i], sli[j] = sli[j], sli[i]

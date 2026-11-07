@@ -9,7 +9,7 @@ import (
 	"errors"
 )
 
-// Cipher 一处实例化后可以多处并发安全复用
+// Cipher is safe for concurrent reuse after construction.
 type Cipher struct {
 	block cipher.Block
 	iv    []byte
@@ -46,13 +46,13 @@ func pkcs7Padding(src []byte, blockSize int) []byte {
 	pad := blockSize - length%blockSize
 	padText := bytes.Repeat([]byte{byte(pad)}, pad)
 	res := make([]byte, length, length+pad)
-	copy(res, src) //复制一份防止当src仍有cap的时候append修改其后的内容
+	copy(res, src) // copy so append does not clobber src backing array when cap remains
 	return append(res, padText...)
 }
 
 var ErrInvalidPadLen = errors.New("invalid padding length")
 
-// 三种填充方式去除填充的方法都相同，根据最后一位来精确定位截取长度
+// trimPadding strips PKCS padding; all three padding modes use the same unpad rule (last byte).
 func trimPadding(dst []byte) ([]byte, error) {
 	length := len(dst)
 	if length == 0 {

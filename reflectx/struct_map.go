@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-// Struct2Map 结构体转成map
+// Struct2Map converts a struct to a map using json struct tags as keys.
 func Struct2Map(obj any) map[string]any {
 	t := reflect.TypeOf(obj)
 	v := reflect.ValueOf(obj)
@@ -14,13 +14,13 @@ func Struct2Map(obj any) map[string]any {
 	}
 	m := make(map[string]any)
 	for i := 0; i < t.NumField(); i++ {
-		if t.Field(i).IsExported() { // 不可导出字段取Interface会panic
+		if t.Field(i).IsExported() { // unexported fields panic on Interface()
 			key := t.Field(i).Tag.Get("json")
-			if key == "-" { // 忽略
+			if key == "-" { // skip
 				continue
 			}
 			if key == "" {
-				key = t.Field(i).Name // 未指定json tag 的情况，使用字段名
+				key = t.Field(i).Name // no json tag: use field name
 			}
 			m[key] = v.Field(i).Interface()
 		}

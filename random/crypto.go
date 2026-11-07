@@ -7,24 +7,32 @@ import (
 	"math/big"
 )
 
-// Bytes 随机字节数组
-func Bytes(n int) []byte {
+// Bytes returns n cryptographically random bytes.
+func Bytes(n int) ([]byte, error) {
 	b := make([]byte, n)
 	if _, err := rand.Read(b); err != nil {
-		panic(err)
+		return nil, err
 	}
-	return b
+	return b, nil
 }
 
 func UUID() string {
-	return hex.EncodeToString(Bytes(16))
+	b, err := Bytes(16)
+	if err != nil {
+		return ""
+	}
+	return hex.EncodeToString(b)
 }
 
 func UUIDWithLen(n int) string {
-	return hex.EncodeToString(Bytes(n / 2))
+	b, err := Bytes(n / 2)
+	if err != nil {
+		return ""
+	}
+	return hex.EncodeToString(b)
 }
 
-// NumCode 安全的六位数字码
+// NumCode returns a cryptographically random six-digit numeric string.
 func NumCode() string {
 	num, _ := rand.Int(rand.Reader, big.NewInt(1e6))
 	return fmt.Sprintf("%06d", num.Int64())
